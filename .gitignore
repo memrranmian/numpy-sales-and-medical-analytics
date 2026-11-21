@@ -1,0 +1,12 @@
+# Files to exclude as requested
+TUTORIAL.md
+*tutorial*
+*TUTORIAL*
+MSDSF25A007_Assignment06*
+*MSDSF25A007_Assignment06*
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/

@@ -1,0 +1,214 @@
+======================================================================
+QUESTION 2: HOSPITAL PATIENT MONITORING AND MEDICAL DATA ANALYSIS SYSTEM
+======================================================================
+
+>>> PART A: Array Creation and Initialization
+
+A1 & A2. Patient Health Measurements Array (Shape: (8, 4)):
+Columns: [Temp (°C), Systolic BP (mmHg), Heart Rate (bpm), SpO2 (%)]
+[[ 38.5 125.   85.   96. ]
+ [ 39.1 140.  115.   92. ]
+ [ 36.8 118.   72.   98. ]
+ [ 37.2 130.  108.   97. ]
+ [ 37.  115.   88.   93. ]
+ [ 36.5 122.   75.   99. ]
+ [ 38.8 135.  104.   94. ]
+ [ 37.1 120.   80.   98. ]]
+
+A3. Auxiliary Arrays Created:
+   np.zeros((8, 4)) - Change Tracker (first 2 rows shown):
+[[0. 0. 0. 0.]
+ [0. 0. 0. 0.]]
+   np.ones(4) - Metric Weights:
+[1. 1. 1. 1.]
+   np.eye(4) - 4x4 Metric Identity Matrix:
+[[1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 0. 1. 0.]
+ [0. 0. 0. 1.]]
+
+A4. Normal Temperature Range (Generated using np.linspace(36.0, 37.5, 7)):
+[36.   36.25 36.5  36.75 37.   37.25 37.5 ]
+
+======================================================================
+>>> PART B: Statistical Analysis
+
+B1 & B2. Summary Statistics per Health Measurement:
+Measurement                |    Mean |  Median |     Min |     Max | Std Dev
+---------------------------------------------------------------------------
+Temperature (°C)           |   37.62 |   37.15 |   36.50 |   39.10 |    0.94
+Blood Pressure (mmHg)      |  125.62 |  123.50 |  115.00 |  140.00 |    8.14
+Heart Rate (bpm)           |   90.88 |   86.50 |   72.00 |  115.00 |   15.07
+Oxygen Saturation (%)      |   95.88 |   96.50 |   92.00 |   99.00 |    2.42
+
+B3. Patient with Highest Heart Rate: Patient 1 (115.0 bpm)
+
+B4. Average Oxygen Saturation across all patients: 95.88%
+
+B5. Universal Function Demo (np.sqrt(np.var(patient_data, axis=0)) == np.std):
+   Calculated with np.sqrt: [ 0.9431  8.1385 15.0701  2.4206]
+   Calculated with np.std:  [ 0.9431  8.1385 15.0701  2.4206]
+   Are they identical? True
+
+======================================================================
+>>> PART C: Boolean Indexing and Patient Identification
+
+C1. Patients with Temperature > 38.0°C (Fever):
+   Boolean Mask: [ True  True False False False False  True False]
+   Patient IDs:  [0 1 6]
+   - Patient 0: Temp = 38.5°C
+   - Patient 1: Temp = 39.1°C
+   - Patient 6: Temp = 38.8°C
+
+C2. Patients with Heart Rate > 100 bpm (Tachycardia):
+   Boolean Mask: [False  True False  True False False  True False]
+   Patient IDs:  [1 3 6]
+   - Patient 1: Heart Rate = 115.0 bpm
+   - Patient 3: Heart Rate = 108.0 bpm
+   - Patient 6: Heart Rate = 104.0 bpm
+
+C3. Patients with SpO2 < 95% (Hypoxemia):
+   Boolean Mask: [False  True False False  True False  True False]
+   Patient IDs:  [1 4 6]
+   - Patient 1: SpO2 = 92.0%
+   - Patient 4: SpO2 = 93.0%
+   - Patient 6: SpO2 = 94.0%
+
+C4. Patients meeting MORE THAN ONE critical condition:
+   Condition Counts per patient (Fever + High HR + Low SpO2): [1 3 0 1 1 0 3 0]
+   Multi-condition Mask: [False  True False False False False  True False]
+   Critical Patient IDs: [1 6]
+   - Patient 1 meets 3 conditions: Fever (39.1°C), High HR (115.0 bpm), Low SpO2 (92.0%)
+   - Patient 6 meets 3 conditions: Fever (38.8°C), High HR (104.0 bpm), Low SpO2 (94.0%)
+
+C5. Positions (Indices) of Patients Requiring Medical Attention (via np.where):
+   Indices: [0 1 3 4 6]
+   Total patients requiring attention: 5 out of 8
+
+======================================================================
+>>> PART D: Broadcasting and Array Updating
+
+D1. Temperature Measurements with Calibration Correction (-0.2°C):
+   Original Temps:  [38.5 39.1 36.8 37.2 37.  36.5 38.8 37.1]
+   Corrected Temps: [38.3 38.9 36.6 37.  36.8 36.3 38.6 36.9]
+
+D2. Oxygen saturation boosted by +3% (capped at 100%):
+   Original SpO2: [96. 92. 98. 97. 93. 99. 94. 98.]
+   Boosted SpO2:  [ 99.  95. 100. 100.  96. 100.  97. 100.]
+
+D3. Created 'updated_patient_data' as an independent copy and modified it.
+
+D4. Comparison between Original and Updated Patient Measurements:
+   Original Patient 1 (before updates): [ 39.1 140.  115.   92. ]
+   Updated  Patient 1 (after updates):  [ 38.9 140.  115.   96. ]
+   Is original patient_data modified? False
+   Difference Matrix (Updated - Original):
+[[-0.2  0.   0.   0. ]
+ [-0.2  0.   0.   4. ]
+ [-0.2  0.   0.   0. ]
+ [-0.2  0.   0.   0. ]
+ [-0.2  0.   0.   4. ]
+ [-0.2  0.   0.   0. ]
+ [-0.2  0.   0.   4. ]
+ [-0.2  0.   0.   0. ]]
+
+======================================================================
+>>> PART E: Reshaping, Transposing, and Array Manipulation
+
+E1. Reshaped Patient Data into 3D Array (Shape: (2, 4, 4)):
+   --- Ward 0 (Patients 0-3) ---
+[[ 38.5 125.   85.   96. ]
+ [ 39.1 140.  115.   92. ]
+ [ 36.8 118.   72.   98. ]
+ [ 37.2 130.  108.   97. ]]
+   --- Ward 1 (Patients 4-7) ---
+[[ 37.  115.   88.   93. ]
+ [ 36.5 122.   75.   99. ]
+ [ 38.8 135.  104.   94. ]
+ [ 37.1 120.   80.   98. ]]
+
+E2. Transposed Array shape: (4, 2, 4) [Measurements x Wards x Patients]
+   Transposed Temperature slice across Ward 0 and Ward 1:
+[[38.5 39.1 36.8 37.2]
+ [37.  36.5 38.8 37.1]]
+
+E3. Swapped Axes (0 and 1) - Shape changed from (2, 4, 4) to (4, 2, 4):
+   First patient position across both wards:
+[[ 38.5 125.   85.   96. ]
+ [ 37.  115.   88.   93. ]]
+
+E4. Flattened Patient Data into 1D (Length: 32):
+[ 38.5 125.   85.   96.   39.1 140.  115.   92.   36.8 118.   72.   98.
+  37.2 130.  108.   97.   37.  115.   88.   93.   36.5 122.   75.   99.
+  38.8 135.  104.   94.   37.1 120.   80.   98. ]
+
+E5. Patient Temperatures Sorted Ascending (using np.sort):
+[36.5 36.8 37.  37.1 37.2 38.5 38.8 39.1]
+
+======================================================================
+>>> PART F: Copying and Array Operations
+
+F1. Created:
+   - alias_data = patient_data (Direct assignment)
+   - shallow_copy_data = patient_data.view() (View/shallow copy)
+   - deep_copy_data = patient_data.copy() (Independent deep copy)
+
+F2. Testing Mutation Impact:
+   Modified deep_copy_data[0, 0] = 999.0
+   Original patient_data[0, 0] is still: 38.5 (Protected!)
+
+   Modified shallow_copy_data[0, 1] = 777.0
+   Original patient_data[0, 1] changed to: 777.0 (Because views share memory!)
+   Reverted patient_data[0, 1] back to: 125.0
+
+F3. np.concatenate((ward_A, ward_B), axis=0) shape: (8, 4)
+    np.stack((ward_A, ward_B), axis=0) shape: (2, 4, 4)
+
+F4. np.split() into two equal patient groups (axis=0):
+    Group 1 shape: (4, 4) (Patients 0-3)
+    Group 2 shape: (4, 4) (Patients 4-7)
+
+======================================================================
+>>> PART G: File Handling and Reporting
+
+G1. Saved patient measurement array to file: 'question_2/patient_data.csv'
+
+G2. Successfully loaded data back from 'question_2/patient_data.csv' (Shape: (8, 4)):
+[[ 38.5 125.   85.   96. ]
+ [ 39.1 140.  115.   92. ]
+ [ 36.8 118.   72.   98. ]
+ [ 37.2 130.  108.   97. ]
+ [ 37.  115.   88.   93. ]
+ [ 36.5 122.   75.   99. ]
+ [ 38.8 135.  104.   94. ]
+ [ 37.1 120.   80.   98. ]]
+
+G3. Verification: Does loaded data match original patient data? -> True
+
+======================================================================
+================== HOSPITAL PATIENT MONITORING REPORT ================
+======================================================================
+1. SUMMARY OF OVERALL WARD VITALS:
+   - Average Temperature:       37.62 °C (Std: 0.94)
+   - Average Systolic BP:       125.62 mmHg (Std: 8.14)
+   - Average Heart Rate:        90.88 bpm (Std: 15.07)
+   - Average Oxygen Saturation: 95.88 % (Std: 2.42)
+----------------------------------------------------------------------
+2. PATIENTS REQUIRING ATTENTION (Threshold Alerts):
+   Total flagged patients: 5 out of 8
+   - Patient 0 [WARNING (SINGLE CONDITION)]: HIGH TEMP (38.5°C > 38.0°C)
+   - Patient 1 [CRITICAL (MULTIPLE CONDITIONS)]: HIGH TEMP (39.1°C > 38.0°C) | HIGH HR (115 bpm > 100 bpm) | LOW SpO2 (92.0% < 95.0%)
+   - Patient 2 [NORMAL / STABLE]: All vitals in normal range
+   - Patient 3 [WARNING (SINGLE CONDITION)]: HIGH HR (108 bpm > 100 bpm)
+   - Patient 4 [WARNING (SINGLE CONDITION)]: LOW SpO2 (93.0% < 95.0%)
+   - Patient 5 [NORMAL / STABLE]: All vitals in normal range
+   - Patient 6 [CRITICAL (MULTIPLE CONDITIONS)]: HIGH TEMP (38.8°C > 38.0°C) | HIGH HR (104 bpm > 100 bpm) | LOW SpO2 (94.0% < 95.0%)
+   - Patient 7 [NORMAL / STABLE]: All vitals in normal range
+----------------------------------------------------------------------
+3. EXTREME VALUES RECORDED:
+   - Highest Temp:       Patient 1 (39.1 °C)
+   - Highest Heart Rate: Patient 1 (115.0 bpm)
+   - Lowest SpO2:        Patient 1 (92.0 %)
+======================================================================
+
+Question 2 completed successfully!
